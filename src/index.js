@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import fileUpload from "express-fileupload"
 import mongoose from "mongoose"
 import data from "./data"
 import notFoundRouter from "./routes/notFoundRouter"
@@ -8,6 +9,7 @@ import userRouter from "./routes/userRouter"
 
 const app = express()
 app.use(cors())
+app.use(fileUpload({createParentPath: true}))
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 

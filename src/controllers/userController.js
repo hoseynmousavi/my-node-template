@@ -37,9 +37,16 @@ function createOrGetUser(req, res)
 function _sendUser({res, user, is_sign_up})
 {
     const {_id} = user
-    const token = tokenHelper.encodeToken({_id})
-    // TODO refreshToken is bullshit
-    createSuccessRespond({res, data: {user, is_sign_up, token, refresh_token: data.tokenSign}, text: respondTextConstant.success[is_sign_up ? "createdUser" : "loginUser"]})
+    tokenHelper.encodeToken({_id})
+        .then(token =>
+        {
+            // TODO refreshToken is bullshit
+            createSuccessRespond({res, data: {user, is_sign_up, token, refresh_token: data.tokenSign}, text: respondTextConstant.success[is_sign_up ? "createdUser" : "loginUser"]})
+        })
+        .catch(err =>
+        {
+            createErrorText({res, status: 400, text: respondTextConstant.error.createTokenErr, detail: err})
+        })
 }
 
 function updateUser(req, res)
@@ -66,31 +73,40 @@ function updateAvatar(req, res)
     checkPermission({req, res})
         .then(user =>
         {
+            const {_id} = user
             const avatar = req?.files?.avatar
-            if (avatar)
-            {
-                const {_id} = user
-                const avatarName = new Date().toISOString() + avatar.name
-                const avatarUrl = `media/pictures/${avatarName}`
-                avatar.mv(avatarUrl, (err) =>
+            _saveAvatar({avatar, res})
+                .then(avatarUrl =>
                 {
-                    if (err) createErrorText({res, status: 400, text: respondTextConstant.error.updateUserErr, detail: err})
-                    else
-                    {
-                        userTb.findOneAndUpdate(
-                            {_id},
-                            {avatar: avatarUrl},
-                            {new: true, useFindAndModify: false, runValidators: true},
-                            (err, updatedUser) =>
-                            {
-                                if (err) createErrorText({res, status: 400, text: respondTextConstant.error.updateUserErr, detail: err})
-                                else createSuccessRespond({res, data: updatedUser, text: respondTextConstant.success.updateUser})
-                            })
-                    }
+                    userTb.findOneAndUpdate(
+                        {_id},
+                        {avatar: avatarUrl},
+                        {new: true, useFindAndModify: false, runValidators: true},
+                        (err, updatedUser) =>
+                        {
+                            if (err) createErrorText({res, status: 400, text: respondTextConstant.error.updateUserErr, detail: err})
+                            else createSuccessRespond({res, data: updatedUser, text: respondTextConstant.success.updateUser})
+                        })
                 })
-            }
-            else createErrorText({res, status: 400, text: respondTextConstant.error.updateUserNoField})
         })
+}
+
+function _saveAvatar({avatar, res})
+{
+    return new Promise(resolve =>
+    {
+        if (avatar)
+        {
+            const avatarName = new Date().toISOString() + avatar.name.replace(/ /g, "")
+            const avatarUrl = `media/pictures/${avatarName}`
+            avatar.mv(avatarUrl, (err) =>
+            {
+                if (err) createErrorText({res, status: 400, text: respondTextConstant.error.updateUserErr, detail: err})
+                else resolve(avatarUrl)
+            })
+        }
+        else resolve(null)
+    })
 }
 
 const userController = {

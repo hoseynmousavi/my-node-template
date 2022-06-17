@@ -39,7 +39,7 @@ function _sendOtp({phone, res})
     const newOtp = new otpTb({code: Math.floor(Math.random() * 8999) + 1000, phone})
     newOtp.save((err, created) =>
     {
-        if (err) createErrorText({res, status: 500, text: respondTextConstant.error.createOtpErr, detail: err})
+        if (err) createErrorText({res, status: 400, text: respondTextConstant.error.createOtpErr, detail: err})
         else
         {
             const {code, phone} = created
