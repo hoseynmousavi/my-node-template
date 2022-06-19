@@ -7,6 +7,7 @@ import notFoundRouter from "./routes/notFoundRouter"
 import otpRouter from "./routes/otpRouter"
 import userRouter from "./routes/userRouter"
 import timerRouter from "./routes/timerRouter"
+import fileRouter from "./routes/fileRouter"
 
 const app = express()
 app.use(cors())
@@ -20,6 +21,7 @@ mongoose.connect(data.connectServerDb, null, () => console.log("connected to db"
 timerRouter(app)
 otpRouter(app)
 userRouter(app)
+fileRouter(app, __dirname)
 notFoundRouter(app)
 
 app.listen(data.port, () => console.log(`server is Now Running on Port ${data.port}`))
