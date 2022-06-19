@@ -20,7 +20,7 @@ function getOtp(req, res)
             else
             {
                 const diffInMinutes = Math.floor((new Date() - preOtp.created_date) / 1000 / 60)
-                if (diffInMinutes >= 5)
+                if (diffInMinutes >= 2)
                 {
                     otpTb.deleteOne({phone})
                         .then((_, err) =>

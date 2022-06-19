@@ -14,6 +14,11 @@ function _getUserById({_id})
     return userTb.findOne({_id})
 }
 
+function getUserByToken(req, res)
+{
+    checkPermission({req, res}).then(user => createSuccessRespond({res, data: user}))
+}
+
 function createOrGetUser(req, res)
 {
     const {phone} = req.body
@@ -110,6 +115,7 @@ function _saveAvatar({avatar, res})
 }
 
 const userController = {
+    getUserByToken,
     _getUserById,
     createOrGetUser,
     updateUser,
