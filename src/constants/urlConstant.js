@@ -4,6 +4,8 @@ const urlConstant = {
 
     user: "/user",
     userAvatar: "/user/avatar",
+
+    timer: "/timer",
 }
 
 export default urlConstant

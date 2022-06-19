@@ -25,13 +25,13 @@ function createOrGetUser(req, res)
     userTb.findOne({phone})
         .then((founded, err) =>
         {
-            if (err) createErrorText({res, status: 500, text: respondTextConstant.error.verifyOtpErr, detail: err})
+            if (err) createErrorText({res, status: 500, message: respondTextConstant.error.verifyOtp, detail: err})
             else if (!founded)
             {
                 const newUser = new userTb({phone})
                 newUser.save((err, user) =>
                 {
-                    if (err) createErrorText({res, status: 400, text: respondTextConstant.error.createUserErr, detail: err})
+                    if (err) createErrorText({res, status: 400, message: respondTextConstant.error.createUser, detail: err})
                     else _sendUser({res, user, is_sign_up: true})
                 })
             }
@@ -46,11 +46,11 @@ function _sendUser({res, user, is_sign_up})
         .then(token =>
         {
             // TODO refreshToken is bullshit
-            createSuccessRespond({res, data: {user, is_sign_up, token, refresh_token: data.tokenSign}, text: respondTextConstant.success[is_sign_up ? "createdUser" : "loginUser"]})
+            createSuccessRespond({res, data: {user, is_sign_up, token, refresh_token: data.tokenSign}, message: respondTextConstant.success[is_sign_up ? "createdUser" : "loginUser"]})
         })
         .catch(err =>
         {
-            createErrorText({res, status: 400, text: respondTextConstant.error.createTokenErr, detail: err})
+            createErrorText({res, status: 400, message: respondTextConstant.error.createToken, detail: err})
         })
 }
 
@@ -67,8 +67,8 @@ function updateUser(req, res)
                 {new: true, useFindAndModify: false, runValidators: true},
                 (err, updatedUser) =>
                 {
-                    if (err) createErrorText({res, status: 400, text: respondTextConstant.error.updateUserErr, detail: err})
-                    else createSuccessRespond({res, data: updatedUser, text: respondTextConstant.success.updateUser})
+                    if (err) createErrorText({res, status: 400, message: respondTextConstant.error.updateUser, detail: err})
+                    else createSuccessRespond({res, data: updatedUser, message: respondTextConstant.success.updateUser})
                 })
         })
 }
@@ -89,8 +89,8 @@ function updateAvatar(req, res)
                         {new: true, useFindAndModify: false, runValidators: true},
                         (err, updatedUser) =>
                         {
-                            if (err) createErrorText({res, status: 400, text: respondTextConstant.error.updateUserErr, detail: err})
-                            else createSuccessRespond({res, data: updatedUser, text: respondTextConstant.success.updateUser})
+                            if (err) createErrorText({res, status: 400, message: respondTextConstant.error.updateUser, detail: err})
+                            else createSuccessRespond({res, data: updatedUser, message: respondTextConstant.success.updateUser})
                         })
                 })
         })
@@ -106,7 +106,7 @@ function _saveAvatar({avatar, res})
             const avatarUrl = `media/pictures/${avatarName}`
             avatar.mv(avatarUrl, (err) =>
             {
-                if (err) createErrorText({res, status: 400, text: respondTextConstant.error.updateUserErr, detail: err})
+                if (err) createErrorText({res, status: 400, message: respondTextConstant.error.updateUser, detail: err})
                 else resolve(avatarUrl)
             })
         }

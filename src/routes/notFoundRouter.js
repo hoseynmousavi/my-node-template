@@ -6,7 +6,7 @@ function notFoundRouter(app)
     app.route("*")
         .all((req, res) =>
         {
-            createErrorText({res, text: respondTextConstant.error.routeNotFound, status: 404})
+            createErrorText({res, message: respondTextConstant.error.routeNotFound, status: 404})
         })
 }
 

@@ -1,7 +1,7 @@
-function createSuccessRespond({res, text, data})
+function createSuccessRespond({res, message, data})
 {
     return res.send({
-        ...(text ? {message: text} : {}),
+        ...(message ? {message} : {}),
         ...(data ? {data} : {}),
     })
 }
