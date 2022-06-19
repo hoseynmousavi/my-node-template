@@ -103,8 +103,8 @@ function _saveAvatar({avatar, res})
         if (avatar)
         {
             const avatarName = new Date().toISOString() + avatar.name.replace(/ /g, "")
-            const avatarUrl = `build/media/pictures/${avatarName}`
-            avatar.mv(avatarUrl, (err) =>
+            const avatarUrl = `media/pictures/${avatarName}`
+            avatar.mv("build/" + avatarUrl, (err) =>
             {
                 if (err) createErrorText({res, status: 400, message: respondTextConstant.error.updateUser, detail: err})
                 else resolve(avatarUrl)
