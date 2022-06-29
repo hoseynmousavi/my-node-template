@@ -7,17 +7,9 @@ const timerModel = new schema({
         type: schema.Types.ObjectId,
         required: "enter user_id",
     },
-    name: {
-        type: String,
-        required: "enter name",
-    },
-    duration_day: {
+    egg_id: {
         type: Number,
-        required: "enter duration_day",
-    },
-    have_notified: {
-        type: Boolean,
-        default: false,
+        required: "enter egg_id",
     },
     created_date: {
         type: Date,

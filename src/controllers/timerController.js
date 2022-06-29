@@ -28,8 +28,8 @@ function addTimer(req, res)
         .then(user =>
         {
             const {_id: user_id} = user
-            const {duration_day, name} = req.body
-            const newTimer = new timerTb({user_id, duration_day, name})
+            const {egg_id} = req.body
+            const newTimer = new timerTb({user_id, egg_id})
             newTimer.save((err, timer) =>
             {
                 if (err) createErrorText({res, status: 400, message: respondTextConstant.error.createTimer, detail: err})
